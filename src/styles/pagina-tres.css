@@ -1,30 +1,34 @@
-/* PSEUDO-CLASSES:
- :hover
- :focus
- :active
- :disabled
- :nth-of-type
-*/
+.map-wrapper {
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid rgba(13, 110, 253, 0.2);
+  box-shadow: inset 0 0 0 1px rgba(13, 110, 253, 0.05);
+  margin-top: 1.25rem;
+}
 
-.sucursales { list-style:none; padding:0; margin:0; }
-.sucursal { padding:.6rem; border-radius:.5rem; transition: all .15s ease; }
-.sucursal:hover { transform: translateX(6px); background: rgba(244,162,97,0.05); box-shadow: 0 8px 20px rgba(42,54,66,0.06); }
-.sucursal:active { transform: translateX(2px); }
-.sucursal[aria-disabled='true'] { opacity:.5; cursor:not-allowed; }
-.sucursales li:nth-of-type(3) { background: rgba(231,111,81,0.07); font-weight:700; }
+.map-container {
+  height: 420px;
+  width: 100%;
+}
 
-/* PSEUDO-ELEMENTS:
-::before 
-::after
-::first-letter
-::selection
-::placeholder
-*/
+.map-heading::before {
+  content: '\1F5FA';
+  margin-right: 0.5rem;
+}
 
-.mapCard h2::before { content: '\1F5FA'; margin-right:.5rem; }
-.mapCard h2::after { content: ' - Mapa interactivo'; color: var(--muted); font-size:.9rem; margin-left:.4rem; }
-.sucursal-info::first-letter { font-size:1.2rem; color: var(--primary); font-weight:700; }
-/* .sucursal-info::selection { background: var(--accent); color:white; } */
+.map-heading::after {
+  content: 'Mapa interactivo';
+  font-size: 0.85rem;
+  color: #6c757d;
+  margin-left: 0.6rem;
+}
 
-/* Sombra */
-.mapCard.map-shadow { box-shadow: 0 18px 40px rgba(42,54,66,0.12), inset 0 -6px 20px rgba(231,111,81,0.03); border-radius:12px; }
+.list-group-item.featured {
+  background: rgba(25, 135, 84, 0.08);
+  border-color: rgba(25, 135, 84, 0.25);
+}
+
+.list-group-item[aria-disabled='true'] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

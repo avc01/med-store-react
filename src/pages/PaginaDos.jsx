@@ -1,84 +1,172 @@
-import React from 'react'
+import React, { useMemo, useState } from 'react'
 import image from '../assets/imagen.svg'
 import '../styles/pagina-dos.css'
 
+const productosOrdenados = [
+  { id: 'termometro', nombre: 'Termómetro Digital', descripcion: 'Ideal para control diario de temperatura.' },
+  { id: 'oximetro', nombre: 'Oxímetro de pulso', descripcion: 'Monitorea saturación de oxígeno en segundos.' },
+  { id: 'tensiometro', nombre: 'Tensiómetro automático', descripcion: 'Incluye brazalete ergonómico para adultos.' },
+  { id: 'estetoscopio', nombre: 'Estetoscopio profesional', descripcion: 'Diseño liviano y gran fidelidad acústica.' },
+  { id: 'botiquin', nombre: 'Botiquín básico', descripcion: 'Contiene los insumos esenciales para emergencias.' }
+]
+
+const categorias = [
+  { id: 'diagnostico', nombre: 'Diagnóstico', descripcion: 'Termómetros, estetoscopios y más.' },
+  { id: 'monitoreo', nombre: 'Monitoreo', descripcion: 'Oxímetros y tensiómetros conectados.' },
+  { id: 'proteccion', nombre: 'Protección personal', descripcion: 'Mascarillas, guantes y batas.' },
+  { id: 'movilidad', nombre: 'Movilidad', descripcion: 'Sillas de ruedas y andaderas.' },
+  { id: 'farmacia', nombre: 'Farmacia', descripcion: 'Medicamentos OTC y suplementos.' }
+]
+
 export default function PaginaDos(){
+  const [imagenesOcultas, setImagenesOcultas] = useState([])
+
+  const toggleImagen = (id) => {
+    setImagenesOcultas((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    )
+  }
+
+  const restaurarVisibilidad = () => {
+    setImagenesOcultas([])
+  }
+
+  const imagenesHero = useMemo(() => productosOrdenados.slice(0, 3), [])
+
   return (
-    <div className="grid" style={{gap:'1.5rem'}}>
-      <section className="hero card shadow">
-        <div>
-          <h2>Venta de Productos Médicos</h2>
-          <p className="intro">Bienvenido a la tienda. Seleccione un producto para ver detalles.</p>
-          <div className="product">Producto ejemplo<div className="effect-note"></div></div>
-        </div>
-        <div className="card shadow">
-          <div className="images">
-            <img src={image} alt="Producto 1" />
-            <img src={image} alt="Producto 2" />
-            <img src={image} alt="Producto 3" />
+    <div className="row g-4">
+      <section className="col-12">
+        <div className="card border-0 shadow-sm">
+          <div className="card-body">
+            <div className="row align-items-center g-4">
+              <div className="col-lg-6">
+                <h2 className="card-title h4">Venta de productos médicos</h2>
+                <p className="text-muted mb-4">
+                  Escoge qué imágenes deseas mostrar en la galería y en las listas. Las tarjetas se actualizan de inmediato cuando ocultas o vuelves a mostrar un elemento.
+                </p>
+
+                <div className="visibility-panel">
+                  <h3 className="h6 text-uppercase text-muted">Control de visibilidad</h3>
+                  <p className="small text-muted mb-2">Marca las casillas para ocultar imágenes específicas.</p>
+                  <div className="list-group">
+                    {productosOrdenados.map((producto) => {
+                      const ocultar = imagenesOcultas.includes(producto.id)
+                      return (
+                        <label key={producto.id} className="list-group-item d-flex align-items-center gap-2">
+                          <input
+                            type="checkbox"
+                            className="form-check-input me-2"
+                            checked={ocultar}
+                            onChange={() => toggleImagen(producto.id)}
+                          />
+                          <span className="flex-grow-1">
+                            {producto.nombre}
+                            {ocultar && <span className="badge bg-warning-subtle text-warning-emphasis ms-2">Oculta</span>}
+                          </span>
+                        </label>
+                      )
+                    })}
+                  </div>
+                  <button type="button" className="btn btn-outline-primary mt-3" onClick={restaurarVisibilidad} disabled={imagenesOcultas.length === 0}>
+                    Mostrar todas las imágenes
+                  </button>
+                </div>
+              </div>
+
+              <div className="col-lg-6">
+                <div className="row g-3 gallery-grid">
+                  {imagenesHero.map((producto) => {
+                    const ocultar = imagenesOcultas.includes(producto.id)
+                    return (
+                      <div key={producto.id} className="col-4">
+                        <div className={`gallery-tile ${ocultar ? 'is-hidden' : ''}`}>
+                          {ocultar ? (
+                            <span className="text-muted small">Imagen oculta</span>
+                          ) : (
+                            <img src={image} alt={producto.nombre} />
+                          )}
+                          <span className="gallery-label">{producto.nombre}</span>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="card">
-        <h2>Listas de productos</h2>
-        <div className="grid cols-2">
-          <div>
-            <h3>Lista ordenada de Ventas</h3>
-            <ol className="list">
-              <li>
-                Termómetro Digital
-                <img src={image} alt="Termómetro Digital" style={{width: '100px', marginTop: '10px'}} />
-              </li>
-              <li>
-                Oxímetro de pulso
-                <img src={image} alt="Oxímetro de pulso" style={{width: '100px', marginTop: '10px'}} />
-              </li>
-              <li>
-                Tensiómetro
-                <img src={image} alt="Tensiómetro" style={{width: '100px', marginTop: '10px'}} />
-              </li>
-              <li>
-                Estetoscopio
-                <img src={image} alt="Estetoscopio" style={{width: '100px', marginTop: '10px'}} />
-              </li>
-              <li>
-                Botiquín básico
-                <img src={image} alt="Botiquín básico" style={{width: '100px', marginTop: '10px'}} />
-              </li>
+      <section className="col-12 col-lg-6">
+        <div className="card border-0 shadow-sm h-100">
+          <div className="card-body">
+            <h3 className="h5 mb-3">Lista ordenada de ventas</h3>
+            <ol className="list-group list-group-numbered">
+              {productosOrdenados.map((producto) => {
+                const ocultar = imagenesOcultas.includes(producto.id)
+                return (
+                  <li key={producto.id} className="list-group-item">
+                    <div className="d-flex flex-column flex-md-row align-items-md-center gap-3">
+                      <div className="image-wrapper">
+                        {ocultar ? (
+                          <span className="placeholder rounded">Imagen oculta</span>
+                        ) : (
+                          <img src={image} alt={producto.nombre} />
+                        )}
+                      </div>
+                      <div>
+                        <h4 className="h6 mb-1">{producto.nombre}</h4>
+                        <p className="text-muted mb-0">{producto.descripcion}</p>
+                      </div>
+                    </div>
+                  </li>
+                )
+              })}
             </ol>
           </div>
-          <div>
-            <h3>Lista desordenada de Categorías</h3>
-            <ul className="list">
-              <li>
-                Diagnóstico
-                <img src={image} alt="Diagnóstico" style={{width: '100px', marginTop: '10px'}} className="wiggle" />
-                <span className="effect-note">Animacion AQUI!!!</span>
-              </li>
-              <li>
-                Monitoreo
-                <img src={image} alt="Monitoreo" style={{width: '100px', marginTop: '10px'}} />
-              </li>
-              <li>
-                Protección personal
-                <img src={image} alt="Protección personal" style={{width: '100px', marginTop: '10px'}} />
-              </li>
-              <li>
-                Movilidad
-                <img src={image} alt="Movilidad" style={{width: '100px', marginTop: '10px'}} />
-              </li>
-              <li>
-                Farmacia
-                <img src={image} alt="Farmacia" style={{width: '100px', marginTop: '10px'}} />
-              </li>
+        </div>
+      </section>
+
+      <section className="col-12 col-lg-6">
+        <div className="card border-0 shadow-sm h-100">
+          <div className="card-body">
+            <h3 className="h5 mb-3">Lista de categorías</h3>
+            <ul className="list-group">
+              {categorias.map((categoria, index) => {
+                const imagenId = productosOrdenados[index]?.id ?? categoria.id
+                const ocultar = imagenesOcultas.includes(imagenId)
+                return (
+                  <li key={categoria.id} className="list-group-item">
+                    <div className="d-flex flex-column flex-md-row align-items-md-center gap-3">
+                      <div className="image-wrapper">
+                        {ocultar ? (
+                          <span className="placeholder rounded">Imagen oculta</span>
+                        ) : (
+                          <img src={image} alt={categoria.nombre} className={index === 0 ? 'wiggle' : ''} />
+                        )}
+                      </div>
+                      <div>
+                        <h4 className="h6 mb-1">{categoria.nombre}</h4>
+                        <p className="text-muted mb-0">{categoria.descripcion}</p>
+                      </div>
+                    </div>
+                  </li>
+                )
+              })}
             </ul>
           </div>
         </div>
       </section>
 
-      <button disabled>Ejemplo!</button>
-      <a href="https://www.youtube.com/">https://www.youtube.com/</a>
+      <section className="col-12">
+        <div className="alert alert-secondary d-flex align-items-center gap-3" role="status">
+          <span className="badge rounded-pill text-bg-primary">Tip</span>
+          <div>
+            Puedes ocultar y mostrar imágenes cuantas veces desees. El estado se mantiene mientras tengas la página abierta.
+          </div>
+        </div>
+        <a href="https://www.youtube.com/" className="btn btn-link p-0">Visitar canal de YouTube</a>
+      </section>
     </div>
   )
 }
