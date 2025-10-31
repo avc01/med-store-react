@@ -1,0 +1,30 @@
+/* PSEUDO-CLASSES:
+ :hover
+ :focus
+ :active
+ :disabled
+ :nth-of-type
+*/
+
+.sucursales { list-style:none; padding:0; margin:0; }
+.sucursal { padding:.6rem; border-radius:.5rem; transition: all .15s ease; }
+.sucursal:hover { transform: translateX(6px); background: rgba(244,162,97,0.05); box-shadow: 0 8px 20px rgba(42,54,66,0.06); }
+.sucursal:active { transform: translateX(2px); }
+.sucursal[aria-disabled='true'] { opacity:.5; cursor:not-allowed; }
+.sucursales li:nth-of-type(3) { background: rgba(231,111,81,0.07); font-weight:700; }
+
+/* PSEUDO-ELEMENTS:
+::before 
+::after
+::first-letter
+::selection
+::placeholder
+*/
+
+.mapCard h2::before { content: '\1F5FA'; margin-right:.5rem; }
+.mapCard h2::after { content: ' - Mapa interactivo'; color: var(--muted); font-size:.9rem; margin-left:.4rem; }
+.sucursal-info::first-letter { font-size:1.2rem; color: var(--primary); font-weight:700; }
+/* .sucursal-info::selection { background: var(--accent); color:white; } */
+
+/* Sombra */
+.mapCard.map-shadow { box-shadow: 0 18px 40px rgba(42,54,66,0.12), inset 0 -6px 20px rgba(231,111,81,0.03); border-radius:12px; }
