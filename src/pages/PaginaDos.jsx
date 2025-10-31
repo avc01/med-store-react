@@ -41,9 +41,6 @@ export default function PaginaDos(){
             <div className="row align-items-center g-4">
               <div className="col-lg-6">
                 <h2 className="card-title h4">Venta de productos médicos</h2>
-                <p className="text-muted mb-4">
-                  Escoge qué imágenes deseas mostrar en la galería y en las listas. Las tarjetas se actualizan de inmediato cuando ocultas o vuelves a mostrar un elemento.
-                </p>
 
                 <div className="visibility-panel">
                   <h3 className="h6 text-uppercase text-muted">Control de visibilidad</h3>
@@ -159,12 +156,6 @@ export default function PaginaDos(){
       </section>
 
       <section className="col-12">
-        <div className="alert alert-secondary d-flex align-items-center gap-3" role="status">
-          <span className="badge rounded-pill text-bg-primary">Tip</span>
-          <div>
-            Puedes ocultar y mostrar imágenes cuantas veces desees. El estado se mantiene mientras tengas la página abierta.
-          </div>
-        </div>
         <a href="https://www.youtube.com/" className="btn btn-link p-0">Visitar canal de YouTube</a>
       </section>
     </div>

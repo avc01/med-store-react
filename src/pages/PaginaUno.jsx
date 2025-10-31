@@ -158,7 +158,7 @@ export default function PaginaUno(){
         <div className="card border-0 shadow-sm h-100">
           <div className="card-body">
             <h2 className="card-title h4">Registrar producto</h2>
-            <p className="text-muted">Todos los campos son obligatorios. El formulario valida que no existan valores en blanco.</p>
+            <p className="text-muted">Todos los campos son obligatorios.</p>
 
             {status && (
               <div className={`alert alert-${status.type} d-flex align-items-center gap-2`} role="alert">
@@ -264,7 +264,6 @@ export default function PaginaUno(){
         <div className="card border-0 shadow-sm h-100">
           <div className="card-body">
             <h2 className="card-title h4">Productos registrados</h2>
-            <p className="text-muted">Cada registro se almacena en un arreglo que también se guarda en el almacenamiento local del navegador.</p>
 
             {products.length === 0 ? (
               <div className="alert alert-info" role="alert">
@@ -300,38 +299,9 @@ export default function PaginaUno(){
               </div>
             )}
 
-            <div className="row text-center g-3 mt-1">
-              <div className="col-12 col-md-4">
-                <div className="stat-card">
-                  <span className="stat-value">{resumen.cantidad}</span>
-                  <span className="stat-label">Productos</span>
-                </div>
-              </div>
-              <div className="col-12 col-md-4">
-                <div className="stat-card">
-                  <span className="stat-value">₡{resumen.totalMonto.toLocaleString('es-CR')}</span>
-                  <span className="stat-label">Monto total</span>
-                </div>
-              </div>
-              <div className="col-12 col-md-4">
-                <div className="stat-card">
-                  <span className="stat-value">{resumen.totalCombos}</span>
-                  <span className="stat-label">Combos</span>
-                </div>
-              </div>
-            </div>
-
             <div className="mt-4">
               <h3 className="h6 text-uppercase text-muted">Vista previa del JSON generado</h3>
               <pre className="json-preview" aria-label="Arreglo de productos">{jsonPreview}</pre>
-            </div>
-
-            <div className="mt-4">
-              <h3 className="h6 text-uppercase text-muted">Contenido del archivo productos.json</h3>
-              <p className="text-muted small mb-2">
-                Este archivo se encuentra en la carpeta pública y puede utilizarse como base para importar datos.
-              </p>
-              <pre className="json-preview bg-light" aria-label="Vista del archivo productos.json">{jsonFileSnapshot}</pre>
             </div>
           </div>
         </div>
