@@ -13,33 +13,42 @@ export default function PaginaTres(){
   ]
 
   return (
-    <div className="grid" style={{gap:'1.5rem'}}>
-      <section className="card mapCard map-shadow">
-        <h2>Mapa Provincia de San José</h2>
-        <div style={{height:'420px', marginTop:'.5rem', borderRadius: '12px', overflow: 'hidden'}}>
-          <MapContainer center={center} zoom={12} style={{height:'100%', width:'100%'}}>
-            <TileLayer
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            {sucursales.map((s, idx) => (
-              <Marker position={s.pos} key={idx}>
-                <Popup>
-                  <strong>{s.name}</strong><br/>
-                  {s.info}
-                </Popup>
-              </Marker>
-            ))}
-          </MapContainer>
-        </div>
-        <div style={{marginTop:'.75rem'}}>
-          <h3 className="h3-title">Sucursales</h3>
-          <ul className="sucursales">
-            {sucursales.map((s, idx) => (
-              <li key={idx} className="sucursal" aria-disabled={idx===4? 'true' : 'false'}>
-                <div className="sucursal-info"><strong>{s.name}</strong> — {s.info}</div>
-              </li>
-            ))}
-          </ul>
+    <div className="row g-4">
+      <section className="col-12">
+        <div className="card border-0 shadow-sm">
+          <div className="card-body">
+            <h2 className="card-title h4 map-heading">Mapa Provincia de San José</h2>
+            <p className="text-muted">Ubica rápidamente cada sucursal de la cadena y consulta información adicional en el mapa interactivo.</p>
+            <div className="map-wrapper">
+              <MapContainer center={center} zoom={12} className="map-container">
+                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                {sucursales.map((sucursal) => (
+                  <Marker position={sucursal.pos} key={sucursal.name}>
+                    <Popup>
+                      <strong>{sucursal.name}</strong>
+                      <br />
+                      {sucursal.info}
+                    </Popup>
+                  </Marker>
+                ))}
+              </MapContainer>
+            </div>
+            <div className="list-group mt-4">
+              {sucursales.map((sucursal, index) => (
+                <div
+                  key={sucursal.name}
+                  className={`list-group-item d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2${index === 2 ? ' featured' : ''}`}
+                  aria-disabled={index === 4 ? 'true' : 'false'}
+                >
+                  <div>
+                    <h3 className="h6 mb-1">{sucursal.name}</h3>
+                    <p className="text-muted mb-0">{sucursal.info}</p>
+                  </div>
+                  <span className="badge text-bg-light">Lat: {sucursal.pos[0].toFixed(3)} | Lng: {sucursal.pos[1].toFixed(3)}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
     </div>

@@ -8,7 +8,7 @@ export default function App(){
   return (
     <>
       <NavBar />
-      <main className="container">
+      <main className="app-main container py-4">
         <Routes>
           <Route path="/" element={<PaginaTres />} />
           <Route path="/pagina-1" element={<PaginaUno />} />
