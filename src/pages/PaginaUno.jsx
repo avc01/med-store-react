@@ -20,10 +20,11 @@ const sucursalesDisponibles = [
   'Pavas'
 ]
 
-export default function PaginaUno(){
+export default function PaginaUno() {
   const [form, setForm] = useState(INITIAL_FORM)
   const [errors, setErrors] = useState({})
   const [status, setStatus] = useState(null)
+  const [externalForm, setExternalForm] = useState(undefined)
   const [products, setProducts] = useState(() => {
     if (typeof window === 'undefined') return []
     try {
@@ -138,6 +139,24 @@ export default function PaginaUno(){
   const handleCancel = () => {
     resetForm()
     setStatus({ type: 'secondary', message: 'El formulario fue limpiado.' })
+  }
+
+  const fetchForm = () => {
+
+    fetch("http://localhost:3001/form")
+      .then((res) => res.text())
+      .then((html) => setExternalForm(html))
+      .catch((err) => {
+        debugger;
+        console.error("Error fetching form:", err);
+      });
+
+    // setExternalForm("Formulario cargado desde API (simulado)")
+  }
+
+  const removeForm = () => {
+    // todo: implementar carga de formulario desde API
+    setExternalForm(undefined)
   }
 
   const handleDownload = () => {
@@ -256,6 +275,19 @@ export default function PaginaUno(){
                 </button>
               </div>
             </form>
+          </div>
+          <div className="card-body"><h2 className="card-title h4">Crear Medico</h2>
+            <p className="text-muted">Todos los campos son obligatorios.</p>
+
+            <div className="d-flex flex-wrap gap-2 mt-4">
+              <button type="button" className="btn btn-outline-secondary" onClick={fetchForm}>Cargar Formulario</button>
+              <button type="button" className="btn btn-dangerous" onClick={removeForm}>Eliminar Formulario</button>
+            </div>
+
+            {
+              externalForm && <div dangerouslySetInnerHTML={{ __html: externalForm }} />
+            }
+
           </div>
         </div>
       </section>
