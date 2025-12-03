@@ -36,6 +36,16 @@ export default function PaginaUno() {
     }
   })
   const [jsonFileSnapshot, setJsonFileSnapshot] = useState('[]')
+  const [medics, setMedics] = useState([])
+  const [draggedItem, setDraggedItem] = useState(null)
+  const [droppedItems, setDroppedItems] = useState([])
+
+  const demoItems = [
+    { id: 1, name: 'Producto 1', type: 'product' },
+    { id: 2, name: 'Producto 2', type: 'product' },
+    { id: 3, name: 'Servicio 1', type: 'service' },
+    { id: 4, name: 'Servicio 2', type: 'service' }
+  ]
 
   useEffect(() => {
     fetch('/productos.json')
@@ -67,6 +77,19 @@ export default function PaginaUno() {
     }
   }, [products])
 
+  useEffect(() => {
+    fetch('http://localhost:3001/list-medics')
+      .then(response => response.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setMedics(data)
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching medics:', error)
+      })
+  }, [])
+
   const resumen = useMemo(() => {
     const total = products.reduce((acc, item) => acc + (Number(item.monto) || 0), 0)
     const combos = products.reduce((acc, item) => acc + (Number(item.cantidadCombo) || 0), 0)
@@ -78,6 +101,7 @@ export default function PaginaUno() {
   }, [products])
 
   const jsonPreview = useMemo(() => JSON.stringify(products, null, 2), [products])
+  const medicsJsonPreview = useMemo(() => JSON.stringify(medics, null, 2), [medics])
 
   const handleChange = (event) => {
     const { name, value } = event.target
@@ -169,6 +193,28 @@ export default function PaginaUno() {
     link.click()
     document.body.removeChild(link)
     URL.revokeObjectURL(url)
+  }
+
+  const handleDragStart = (event, item) => {
+    setDraggedItem(item)
+    event.dataTransfer.effectAllowed = 'move'
+  }
+
+  const handleDragOver = (event) => {
+    event.preventDefault()
+    event.dataTransfer.dropEffect = 'move'
+  }
+
+  const handleDrop = (event) => {
+    event.preventDefault()
+    if (draggedItem) {
+      setDroppedItems(prev => [...prev, draggedItem])
+      setDraggedItem(null)
+    }
+  }
+
+  const clearDroppedItems = () => {
+    setDroppedItems([])
   }
 
   return (
@@ -334,6 +380,88 @@ export default function PaginaUno() {
             <div className="mt-4">
               <h3 className="h6 text-uppercase text-muted">Vista previa del JSON generado</h3>
               <pre className="json-preview" aria-label="Arreglo de productos">{jsonPreview}</pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="col-12 mt-4">
+        <div className="card border-0 shadow-sm">
+          <div className="card-body">
+            <h2 className="card-title h4">Lista de Médicos</h2>
+
+            {medics.length === 0 ? (
+              <div className="alert alert-info" role="alert">
+                Cargando médicos...
+              </div>
+            ) : (
+              <div>
+                <h3 className="h6 text-uppercase text-muted mb-3">Vista previa del JSON de médicos</h3>
+                <pre className="json-preview" aria-label="Arreglo de médicos">{medicsJsonPreview}</pre>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      <section className="col-12 mt-4">
+        <div className="card border-0 shadow-sm">
+          <div className="card-body">
+            <h2 className="card-title h4">Demo de Drag & Drop</h2>
+            <p className="text-muted">Arrastra los elementos de la izquierda a la zona de destino.</p>
+
+            <div className="row">
+              <div className="col-md-6">
+                <h3 className="h6 text-uppercase text-muted mb-3">Elementos arrastrables</h3>
+                <div className="d-flex flex-column gap-2">
+                  {demoItems.map((item) => (
+                    <div
+                      key={item.id}
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, item)}
+                      className="p-3 border rounded bg-light cursor-move"
+                      style={{ cursor: 'move' }}
+                    >
+                      <span className="fw-semibold">{item.name}</span>
+                      <small className="text-muted ms-2">({item.type})</small>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="col-md-6">
+                <h3 className="h6 text-uppercase text-muted mb-3">Zona de destino</h3>
+                <div
+                  onDragOver={handleDragOver}
+                  onDrop={handleDrop}
+                  className="p-4 border-2 border-dashed border-primary rounded bg-light min-vh-25 d-flex flex-column"
+                  style={{ minHeight: '200px' }}
+                >
+                  {droppedItems.length === 0 ? (
+                    <div className="text-muted text-center my-auto">
+                      Suelta los elementos aquí
+                    </div>
+                  ) : (
+                    <div className="d-flex flex-column gap-2">
+                      {droppedItems.map((item, index) => (
+                        <div key={`${item.id}-${index}`} className="p-2 bg-white border rounded">
+                          <span className="fw-semibold">{item.name}</span>
+                          <small className="text-muted ms-2">({item.type})</small>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                {droppedItems.length > 0 && (
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary btn-sm mt-3"
+                    onClick={clearDroppedItems}
+                  >
+                    Limpiar zona
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
